@@ -1,24 +1,117 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
++ Ruby version 2.5.1
++ Rails ~> 5.2.1
 
-Things you may want to cover:
 
-* Ruby version
+https://www.udemy.com/ruby-on-rails-react-angular
 
-* System dependencies
+#### rails g controller Welcome home
++ update config/routes
+```
+Rails.application.routes.draw do
+  root 'welcome#home'
+  get 'welcome/home'
+end
+```
 
-* Configuration
+`bundle`
 
-* Database creation
+#### yarn add vue
+`yarn install`
 
-* Database initialization
+### Add Vue
+#### Create a new file
+**`app/javascript/packs/app.js`**
+```
+import Vue from 'vue';
+```
 
-* How to run the test suite
+**`app/views/layouts/application.html.erb`**
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RailsVueTodo</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
 
-* Services (job queues, cache servers, search engines, etc.)
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application' %>
+    <%= javascript_pack_tag 'app' %>
 
-* Deployment instructions
+  </head>
 
-* ...
+  <body>
+    <%= yield %>
+  </body>
+</html>
+```
+
+### Config Vue
+**`config/webpack/custom.js`**
+```
+import Vue from 'vue';
+```
+
+---
+
+#### Create a new Rails app; adding webpack and skipping coffeescript and turbolinks. Then stop the Spring server.
+$ `rails new task-manager-app --webpack --skip-coffee --skip-turbolinks
+cd task-manager-app`
+$ `spring stop`
+
+#### Add a new Controller called Welcome with the action `home`
+$ `rails g controller Welcome home`
+
+#### Update the `config/routes.rb` to route the opening page to the home page
+```
+Rails.application.routes.draw do
+  root 'welcome#home'
+  get 'welcome/home'
+end
+```
+
+#### Start the app
+`rails server`
+
+Load `localhost:3000` in your browser
+
+#### Add yarn and Vue to the application
+$ `yarn add vue`
+$ `yarn install`
+
+#### Create a new file
+**`app/javascript/packs/app.js`**
+```
+import Vue from 'vue';
+```
+
+#### Update `app/views/layouts/application.html.erb` add
+```
+<%= javascript_pack_tag 'application' %>
+<%= javascript_pack_tag 'app' %>
+to the <head>  element
+```
+
+#### Create `custom.js` in `config/webpack`
+Add this to the file:  
+**`config/webpack/custom.js`**
+```
+module.exports = {
+  resolve: {
+    alias: {
+      vue: 'vue/dist/vue.min.js'
+    }
+  }
+}
+```
+
+#### Update `config/webpack/environment.js`
+```
+const { environment } = require('@rails/webpacker')
+const customConfig = require('./custom')
+environment.config.merge(customConfig)
+module.exports = environment
+```
